@@ -31,10 +31,12 @@ const playerXScore = document.querySelector("#playerx-score");
 const playerOScore = document.querySelector("#playero-score");
 const tieScore = document.querySelector("#tie-score");
 
-const resetBtn = document.querySelector("button");
+const newGameBtn = document.querySelector("#new-game");
+const resetBtn = document.querySelector("#reset-score");
 
 let clicks = 0;
 const board = {};
+const gameResults = {};
 
 boardCells.forEach(
     cell => cell.addEventListener("click", (evt) => {
@@ -51,18 +53,32 @@ boardCells.forEach(
 
         if (result === "X") {
             playerXScore.textContent = Number(playerXScore.textContent) + 1;
+            boardCells.forEach(cell => cell.style.pointerEvents = "none");
         } else if (result === "O") {
             playerOScore.textContent = Number(playerOScore.textContent) + 1;
+            boardCells.forEach(cell => cell.style.pointerEvents = "none");
         } else if (result === "T") {
             tieScore.textContent = Number(tieScore.textContent) + 1;
+            boardCells.forEach(cell => cell.style.pointerEvents = "none");
         }
     })
 );
 
-resetBtn.addEventListener("click", () => { 
-    boardCells.forEach(x => x.textContent = "");
-    boardCells.forEach(x => x.style.pointerEvents = "auto");
+newGameBtn.addEventListener("click", () => {
+    boardCells.forEach(cell => {
+        cell.textContent = "";
+        cell.style.pointerEvents = "auto"
+    });
+
+    clicks = 0;
+    Object.keys(board).forEach(key => delete board[key]);
+})
+
+resetBtn.addEventListener("click", () => {
+    boardCells.forEach(cell => {
+        cell.textContent = "";
+        cell.style.pointerEvents = "auto"
+    });
 
     [playerOScore, playerXScore, tieScore].forEach(x => x.textContent = 0); 
 });
-
