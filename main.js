@@ -1,5 +1,5 @@
 function checkWinner(a, b, c) {
-    return [a, b, c].every(element => element === a && element !== undefined);
+    return a && [a, b, c].every(element => element === a);
 }
 
 function gameResult(board) {
@@ -24,6 +24,17 @@ function gameResult(board) {
     }
 }
 
+function disableBoard() {
+    boardCells.forEach(cell => cell.style.pointerEvents = "none");
+}
+
+function resetBoard() {
+    boardCells.forEach(cell => {
+        cell.textContent = "";
+        cell.style.pointerEvents = "auto";
+    });
+}
+
 const boardCells = document.querySelectorAll(".cell");
 const winnerLabel = document.querySelector("#winner");
 
@@ -34,7 +45,7 @@ const tieScore = document.querySelector("#tie-score");
 const newGameBtn = document.querySelector("#new-game");
 const resetBtn = document.querySelector("#reset-score");
 
-let clicks = 0;
+let setMarkers = 0;
 const board = {};
 const gameResults = {};
 
@@ -42,43 +53,34 @@ boardCells.forEach(
     cell => cell.addEventListener("click", (evt) => {
         evt.target.style.pointerEvents = "none";
 
-        clicks += 1;
+        setMarkers += 1;
 
-        evt.target.textContent = clicks % 2 !== 0 ? "X" : "O";
+        evt.target.textContent = setMarkers % 2 !== 0 ? "X" : "O";
         evt.target.style.color = evt.target.textContent === "X" ? "red" : "blue";
         board[evt.target.dataset.cellValue] = evt.target.textContent;
 
         const result = gameResult(board);
-        console.log(result);
 
         if (result === "X") {
             playerXScore.textContent = Number(playerXScore.textContent) + 1;
-            boardCells.forEach(cell => cell.style.pointerEvents = "none");
+            disableBoard();
         } else if (result === "O") {
             playerOScore.textContent = Number(playerOScore.textContent) + 1;
-            boardCells.forEach(cell => cell.style.pointerEvents = "none");
+            disableBoard();
         } else if (result === "T") {
             tieScore.textContent = Number(tieScore.textContent) + 1;
-            boardCells.forEach(cell => cell.style.pointerEvents = "none");
+            disableBoard();
         }
     })
 );
 
 newGameBtn.addEventListener("click", () => {
-    boardCells.forEach(cell => {
-        cell.textContent = "";
-        cell.style.pointerEvents = "auto"
-    });
-
-    clicks = 0;
+    resetBoard();
+    setMarkers = 0;
     Object.keys(board).forEach(key => delete board[key]);
 })
 
 resetBtn.addEventListener("click", () => {
-    boardCells.forEach(cell => {
-        cell.textContent = "";
-        cell.style.pointerEvents = "auto"
-    });
-
+    resetBoard();
     [playerOScore, playerXScore, tieScore].forEach(x => x.textContent = 0); 
 });
