@@ -16,7 +16,7 @@ header {
 }
 
 h1 {
-    padding-top: 40px;
+    padding-top: 20px;
 }
 
 main {
@@ -25,12 +25,18 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 
-.player-info {
-    border: 1px solid black;
+.player-board {
+    display: flex;
+    justify-content: space-around;
     width: 400px;
-    aspect-ratio: 1 / 1;
+}
+
+.result-board {
+    display: flex;
+    width: 400px;
 }
 
 .game-board {
@@ -50,6 +56,11 @@ main {
   align-items: center;
   font-size: 3rem;
   aspect-ratio: 1 / 1;
+}
+
+button {
+    padding: 10px;
+    border-radius: 5px;
 }
 
 @media screen and (max-width: 600px) {

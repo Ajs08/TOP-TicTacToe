@@ -4,27 +4,34 @@ function checkWinner(a, b, c) {
 
 function gameResult(board) {
     if (checkWinner(board.one, board.two, board.three)) {
-        alert(`Player ${board.one} wins.`);
+        return board.one;
     } else if (checkWinner(board.four, board.five, board.six)) {
-        alert(`Player ${board.four} wins.`);
+        return board.four;
     } else if (checkWinner(board.seven, board.eight, board.nine)) {
-        alert(`Player ${board.seven} wins.`);
+        return board.seven;
     } else if (checkWinner(board.one, board.four, board.seven)) {
-        alert(`Player ${board.one} wins.`);
+        return board.one;
     } else if (checkWinner(board.two, board.five, board.eight)) {
-        alert(`Player ${board.two} wins.`);
+        return board.two;
     } else if (checkWinner(board.three, board.six, board.nine)) {
-        alert(`Player ${board.three} wins.`);
+        return board.three;
     } else if (checkWinner(board.one, board.five, board.nine)) {
-        alert(`Player ${board.one} wins.`);
+        return board.one;
     } else if (checkWinner(board.three, board.five, board.seven)) {
-        alert(`Player ${board.three} wins.`);
+        return board.three;
     } else if (Object.values(board).length === 9 && Object.values(board).every(x => x !== "")) {
-        alert("It's a tie, no one wins.");
+        return "T";
     }
 }
 
 const boardCells = document.querySelectorAll(".cell");
+const winnerLabel = document.querySelector("#winner");
+
+const playerXScore = document.querySelector("#playerx-score");
+const playerOScore = document.querySelector("#playero-score");
+const tieScore = document.querySelector("#tie-score");
+
+const resetBtn = document.querySelector("button");
 
 let clicks = 0;
 const board = {};
@@ -39,7 +46,23 @@ boardCells.forEach(
         evt.target.style.color = evt.target.textContent === "X" ? "red" : "blue";
         board[evt.target.dataset.cellValue] = evt.target.textContent;
 
-        gameResult(board);
+        const result = gameResult(board);
+        console.log(result);
+
+        if (result === "X") {
+            playerXScore.textContent = Number(playerXScore.textContent) + 1;
+        } else if (result === "O") {
+            playerOScore.textContent = Number(playerOScore.textContent) + 1;
+        } else if (result === "T") {
+            tieScore.textContent = Number(tieScore.textContent) + 1;
+        }
     })
 );
+
+resetBtn.addEventListener("click", () => { 
+    boardCells.forEach(x => x.textContent = "");
+    boardCells.forEach(x => x.style.pointerEvents = "auto");
+
+    [playerOScore, playerXScore, tieScore].forEach(x => x.textContent = 0); 
+});
 
